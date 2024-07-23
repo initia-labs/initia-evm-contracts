@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "./interfaces/ICosmos.sol";
-import "./utils/jsmnSolLib.sol";
+import "./utils/JsmnSolLib.sol";
 import "./utils/IsoToUnix.sol";
 
 contract Slinky {
