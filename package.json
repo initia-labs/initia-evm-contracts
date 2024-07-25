@@ -1,0 +1,22 @@
+{
+  "name": "@initia/initia-evm-contracts",
+  "license": "MIT",
+  "version": "0.1.0",
+  "description": "**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**",
+  "author": "Initia Labs",
+  "files": [
+    "src/*.sol",
+    "src/interfaces/*.sol"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/initia-labs/initia-evm-contracts.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/initia-labs/initia-evm-contracts/issues"
+  },
+  "homepage": "https://github.com/initia-labs/initia-evm-contracts#readme"
+}
