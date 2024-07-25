@@ -6,7 +6,8 @@
   "author": "Initia Labs",
   "files": [
     "src/*.sol",
-    "src/interfaces/*.sol"
+    "src/**/*.sol",
+    "lib"
   ],
   "repository": {
     "type": "git",
@@ -18,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/initia-labs/initia-evm-contracts/issues"
   },
-  "homepage": "https://github.com/initia-labs/initia-evm-contracts#readme"
+  "homepage": "https://github.com/initia-labs/initia-evm-contracts#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "5.0.0"
+  }
 }
