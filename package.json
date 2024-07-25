@@ -1,7 +1,7 @@
 {
   "name": "@initia/initia-evm-contracts",
   "license": "MIT",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Smart contracts for interacting and developing with the Initia MiniEVM framework.",
   "author": "Initia Labs",
   "files": [
