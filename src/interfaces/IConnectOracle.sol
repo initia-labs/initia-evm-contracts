@@ -1,6 +1,6 @@
 pragma solidity ^0.8.24;
 
-interface ISlinky {
+interface ConnectOracle {
     struct Price {
         uint256 price;
         uint256 timestamp;

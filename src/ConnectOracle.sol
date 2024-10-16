@@ -5,7 +5,7 @@ import "./interfaces/ICosmos.sol";
 import "./utils/JsmnSolLib.sol";
 import "./utils/IsoToUnix.sol";
 
-contract Slinky {
+contract ConnectOracle {
     struct Price {
         uint256 price;
         uint256 timestamp;
@@ -20,20 +20,18 @@ contract Slinky {
     constructor() {}
 
     function get_all_currency_pairs() external returns (string memory) {
-        string memory path = "/slinky.oracle.v1.Query/GetAllCurrencyPairs";
+        string memory path = "/connect.oracle.v2.Query/GetAllCurrencyPairs";
         string memory req = "{}";
         return ICosmos(cosmosContract).query_cosmos(path, req);
     }
 
-    function get_price(string memory base, string memory quote) external returns (Price memory) {
-        string memory path = "/slinky.oracle.v1.Query/GetPrice";
+    function get_price(string memory pair_id) external returns (Price memory) {
+        string memory path = "/connect.oracle.v2.Query/GetPrice";
 
-        string[] memory join_strs = new string[](5);
-        join_strs[0] = '{"currency_pair": {"Base": "';
-        join_strs[1] = base;
-        join_strs[2] = '", "Quote": "';
-        join_strs[3] = quote;
-        join_strs[4] = '"}}';
+        string[] memory join_strs = new string[](3);
+        join_strs[0] = '{"currency_pair": "';
+        join_strs[1] = pair_id;
+        join_strs[2] = '"}';
         string memory req = join(join_strs, "");
         string memory queryRes = COSMOS_CONTRACT.query_cosmos(path, req);
 
@@ -46,7 +44,7 @@ contract Slinky {
     }
 
     function get_prices(string[] memory pair_ids) external returns (Price[] memory) {
-        string memory path = "/slinky.oracle.v1.Query/GetPrices";
+        string memory path = "/connect.oracle.v2.Query/GetPrices";
         string memory req = string.concat(string.concat('{"currency_pair_ids":["', join(pair_ids, '","')), '"]}');
         uint256 numberElements = 3 + pair_ids.length * 15;
 
