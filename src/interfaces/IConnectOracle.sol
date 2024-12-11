@@ -1,6 +1,6 @@
 pragma solidity ^0.8.24;
 
-interface ConnectOracle {
+interface IConnectOracle {
     struct Price {
         uint256 price;
         uint256 timestamp;
@@ -11,6 +11,11 @@ interface ConnectOracle {
     }
 
     function get_all_currency_pairs() external returns (string memory);
-    function get_price(string memory base, string memory quote) external returns (Price memory);
-    function get_prices(string[] memory pair_ids) external returns (Price[] memory);
+    function get_price(
+        string memory base,
+        string memory quote
+    ) external returns (Price memory);
+    function get_prices(
+        string[] memory pair_ids
+    ) external returns (Price[] memory);
 }
