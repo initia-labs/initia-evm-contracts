@@ -12,7 +12,5 @@ interface IConnectOracle {
 
     function get_all_currency_pairs() external returns (string memory);
     function get_price(string memory pair_id) external returns (Price memory);
-    function get_prices(
-        string[] memory pair_ids
-    ) external returns (Price[] memory);
+    function get_prices(string[] memory pair_ids) external returns (Price[] memory);
 }
