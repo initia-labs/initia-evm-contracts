@@ -15,14 +15,10 @@ contract ConnectOracle {
         uint64 id;
     }
 
-    address cosmosContract;
-
-    constructor() {}
-
     function get_all_currency_pairs() external returns (string memory) {
         string memory path = "/connect.oracle.v2.Query/GetAllCurrencyPairs";
         string memory req = "{}";
-        return ICosmos(cosmosContract).query_cosmos(path, req);
+        return COSMOS_CONTRACT.query_cosmos(path, req);
     }
 
     function get_price(string memory pair_id) external returns (Price memory) {
