@@ -3,32 +3,19 @@
 pragma solidity ^0.8.24;
 
 import "forge-std/Script.sol";
-import {ConnectOracle, Price} from "../src/ConnectOracle.sol";
+import {ConnectOracle, Price} from "src/ConnectOracle.sol";
+// forge script script/ConnectOracle.s.sol:ConnectOracleDeployScript\
+//  --rpc-url $JSON_RPC_URL\
+//  --broadcast \
+//  --interactives 1
 
-contract OracleScript is Script {
+contract ConnectOracleDeployScript is Script {
     ConnectOracle public oracle;
 
-    constructor(address _oracle) {
-        oracle = ConnectOracle(_oracle);
-    }
-
-    function getPrice(string memory pairId) public {
+    function run() public {
         vm.startBroadcast();
-        Price memory price = oracle.get_price(pairId);
-        console.log("Price:", price.price);
+        oracle = new ConnectOracle();
+        console.log("Deployed ConnectOracle:", address(oracle));
         vm.stopBroadcast();
-    }
-
-    function getAllCurrencyPairs() public {
-        vm.startBroadcast();
-        string memory prices = oracle.get_all_currency_pairs();
-        console.log("Prices:", prices);
-        vm.stopBroadcast();
-    }
-
-    function getPrices(
-        string[] memory pair_ids
-    ) public returns (Price[] memory) {
-        return oracle.get_prices(pair_ids);
     }
 }
