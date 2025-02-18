@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.25;
 
 import "./ERC20ACL.sol";
 import "../src/ERC20Registry.sol";
@@ -18,35 +18,61 @@ contract InitiaCustomERC20 is IERC20, Ownable, ERC20Registry, ERC165, ERC20ACL {
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165) returns (bool) {
-        return interfaceId == type(IERC20).interfaceId || super.supportsInterface(interfaceId);
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC165) returns (bool) {
+        return
+            interfaceId == type(IERC20).interfaceId ||
+            super.supportsInterface(interfaceId);
     }
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimals) register_erc20 {
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        uint8 _decimals
+    ) register_erc20 {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
     }
 
-    function _transfer(address sender, address recipient, uint256 amount) internal register_erc20_store(recipient) {
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal register_erc20_store(recipient) {
+        require(
+            balanceOf[sender] >= amount,
+            "ERC20: transfer amount exceeds balance"
+        );
         balanceOf[sender] -= amount;
         balanceOf[recipient] += amount;
         emit Transfer(sender, recipient, amount);
     }
 
-    function _mint(address to, uint256 amount) internal register_erc20_store(to) {
+    function _mint(
+        address to,
+        uint256 amount
+    ) internal register_erc20_store(to) {
         balanceOf[to] += amount;
         totalSupply += amount;
         emit Transfer(address(0), to, amount);
     }
 
     function _burn(address from, uint256 amount) internal {
+        require(
+            balanceOf[from] >= amount,
+            "ERC20: burn amount exceeds balance"
+        );
         balanceOf[from] -= amount;
         totalSupply -= amount;
         emit Transfer(from, address(0), amount);
     }
 
-    function transfer(address recipient, uint256 amount) external transferable(recipient) returns (bool) {
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) external transferable(recipient) returns (bool) {
         _transfer(msg.sender, recipient, amount);
         return true;
     }
@@ -57,11 +83,15 @@ contract InitiaCustomERC20 is IERC20, Ownable, ERC20Registry, ERC165, ERC20ACL {
         return true;
     }
 
-    function transferFrom(address sender, address recipient, uint256 amount)
-        external
-        transferable(recipient)
-        returns (bool)
-    {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external transferable(recipient) returns (bool) {
+        require(
+            allowance[sender][msg.sender] >= amount,
+            "ERC20: transfer amount exceeds allowance"
+        );
         allowance[sender][msg.sender] -= amount;
         _transfer(sender, recipient, amount);
         return true;
@@ -71,11 +101,28 @@ contract InitiaCustomERC20 is IERC20, Ownable, ERC20Registry, ERC165, ERC20ACL {
         _mint(to, amount);
     }
 
-    function burn(address from, uint256 amount) external burnable(from) onlyOwner {
-        _burn(from, amount);
+    function burn(uint256 amount) external burnable(msg.sender) {
+        _burn(msg.sender, amount);
     }
 
-    function sudoTransfer(address sender, address recipient, uint256 amount) external onlyChain {
+    function burnFrom(
+        address from,
+        uint256 amount
+    ) external burnable(from) returns (bool) {
+        require(
+            allowance[from][msg.sender] >= amount,
+            "ERC20: burn amount exceeds allowance"
+        );
+        allowance[from][msg.sender] -= amount;
+        _burn(from, amount);
+        return true;
+    }
+
+    function sudoTransfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external onlyChain {
         _transfer(sender, recipient, amount);
     }
 }
